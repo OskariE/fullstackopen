@@ -7,12 +7,17 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   const Stats = () => {
+    const all = good + bad + neutral
+    const average = (good - bad) / all
     return (
       <div>
         <h1>statistics</h1>
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {bad}</p>
+        <p>all {all}</p>
+        <p>average {average}</p>
+        <p>positive {good / all * 100}%</p>
       </div>
     )
   }
