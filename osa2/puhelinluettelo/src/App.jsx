@@ -22,7 +22,7 @@ const App = () => {
 
   const deletePerson = (id) => {
     const findPerson = persons.find(p => p.id === id)
-    
+
     if (window.confirm(`Delete ${findPerson.name}?`)) {
       personService.remove(id).then(
         response => {
@@ -40,8 +40,21 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (checkName() === true) {
-      alert(`${newName} is already added to the phonebook`)
-      return 
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const found = persons.find(person => person.name === newName)
+        const updated = {...found, number: newNumber}
+
+        personService.update(updated.id, updated).then(
+          response => {
+            setPersons(persons.map(person =>
+               person.id !== updated.id ? person : response))
+          }
+        )
+        setNewName("")
+        setNewNumber("")
+        return
+      } 
+      else {return}
     }
     const newPerson = {
       name: newName,
