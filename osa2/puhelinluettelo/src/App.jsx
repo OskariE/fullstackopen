@@ -20,6 +20,16 @@ const App = () => {
       })
   })
 
+  const deletePerson = (id) => {
+    const findPerson = persons.find(p => p.id === id)
+    
+    if (window.confirm(`Delete ${findPerson.name}?`)) {
+      personService.remove(id).then(
+        response => {
+          setPersons(persons.filter(person => person.id !== id))
+        }
+      )}
+  }
 
   const checkName = () => {
     const names = persons.map(person => person.name)
@@ -67,11 +77,13 @@ const App = () => {
       <Filter value={search} handleSearchChange={handleSearchChange}/>
       <h2>Phonebook</h2>
       <PersonForm add={addPerson} name={newName} 
-      handleName={handleNameChange} 
-      handleNumber={handleNumberChange}
-      number={newNumber}/>
+        handleName={handleNameChange} 
+        handleNumber={handleNumberChange}
+        number={newNumber}/>
       <h2>Numbers</h2>
-      <Persons people={peopleToShow}/>
+      {peopleToShow.map(person => 
+        <Persons key={person.id} person={person} 
+        deletePerson={() => deletePerson(person.id)}/>)}
     </div>
   )
 
