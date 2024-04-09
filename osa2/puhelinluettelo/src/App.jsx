@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [message, setMessage] = useState(null)
 
 
   useEffect(() => {
@@ -27,6 +29,8 @@ const App = () => {
       personService.remove(id).then(
         response => {
           setPersons(persons.filter(person => person.id !== id))
+          setMessage(`${findPerson.name} has been deleted`)
+          setTimeout(() => {setMessage(null)}, 3000)
         }
       )}
   }
@@ -50,6 +54,9 @@ const App = () => {
                person.id !== updated.id ? person : response))
           }
         )
+        setMessage(`${newName} has been updated`)
+        setTimeout(() => {setMessage(null)}, 3000)
+
         setNewName("")
         setNewNumber("")
         return
@@ -63,6 +70,10 @@ const App = () => {
     personService.create(newPerson)
       .then(response => {
         setPersons(persons.concat(response.data))
+
+        setMessage(`${newName} has been added to the phonebook`)
+        setTimeout(() => {setMessage(null)}, 3000)
+
         setNewName("")
         setNewNumber("")
       })
@@ -89,6 +100,7 @@ const App = () => {
     <div>
       <Filter value={search} handleSearchChange={handleSearchChange}/>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <PersonForm add={addPerson} name={newName} 
         handleName={handleNameChange} 
         handleNumber={handleNumberChange}
