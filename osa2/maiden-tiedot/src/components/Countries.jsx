@@ -1,5 +1,21 @@
-const Countries = ({filtered}) => {
+const Countries = ({filtered, toggleShow, showCountry, showButton}) => {
     const length = filtered.length
+    if (showButton) {
+        const foundCountry = filtered.filter(country => country.name.common === showCountry)
+        return (
+            <div>
+            <h1>{foundCountry[0].name.common}</h1>
+            <p>capital {foundCountry[0].capital}</p>
+            <p>area {foundCountry[0].area}</p>
+            <h2>Languages</h2>
+            <ul>
+                {Object.values(foundCountry[0].languages).map(language =>
+                     <li key={language}>{language}</li>)}
+            </ul>
+            <img src={foundCountry[0].flags.png}></img>
+            </div>
+        )
+    }
     if (length === 250 || length === 0) { return }
     if (length > 10) {
         return (
@@ -25,7 +41,9 @@ const Countries = ({filtered}) => {
     }
 
     return (
-        filtered.map(country => <p key={country.name.common}>{country.name.common}</p>)
+        filtered.map(country =>
+             <p key={country.name.common}>{country.name.common}<button onClick={() => 
+                toggleShow(country.name.common)}>show</button></p>)
     )
 }
 
