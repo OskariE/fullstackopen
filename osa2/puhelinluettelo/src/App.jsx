@@ -4,6 +4,7 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Notification from './components/Notification'
 import personService from './services/persons'
+import ErrorMessage from './components/ErrorMessage'
 
 
 const App = () => {
@@ -13,7 +14,7 @@ const App = () => {
   const [search, setSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [message, setMessage] = useState(null)
-
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll()
@@ -23,21 +24,24 @@ const App = () => {
   })
 
   const deletePerson = (id) => {
-    const findPerson = persons.find(p => p.id === id)
+    const foundPerson = persons.find(p => p.id === id)
 
-    if (window.confirm(`Delete ${findPerson.name}?`)) {
+    if (window.confirm(`Delete ${foundPerson.name}?`)) {
       personService.remove(id).then(
         response => {
           setPersons(persons.filter(person => person.id !== id))
-          setMessage(`${findPerson.name} has been deleted`)
+          setMessage(`${foundPerson.name} has been deleted`)
           setTimeout(() => {setMessage(null)}, 3000)
         }
-      )}
+      ).catch(error => {
+        setErrorMessage(`Something went wrong...`)
+        setTimeout(() => {setErrorMessage(null)}, 3000)
+      })
+    }
   }
 
   const checkName = () => {
     const names = persons.map(person => person.name)
-    console.log(names)
     return names.includes(newName)
   }
 
@@ -53,7 +57,10 @@ const App = () => {
             setPersons(persons.map(person =>
                person.id !== updated.id ? person : response))
           }
-        )
+        ).catch(error => {
+          setErrorMessage(`${newName} was already removed from the server`)
+          setTimeout(() => {setErrorMessage(null)}, 3000)
+        })
         setMessage(`${newName} has been updated`)
         setTimeout(() => {setMessage(null)}, 3000)
 
@@ -76,6 +83,9 @@ const App = () => {
 
         setNewName("")
         setNewNumber("")
+      }).catch(error => {
+        setErrorMessage(`Something went wrong...`)
+        setTimeout(() => {setErrorMessage(null)}, 3000)
       })
   }
   
@@ -100,6 +110,7 @@ const App = () => {
     <div>
       <Filter value={search} handleSearchChange={handleSearchChange}/>
       <h2>Phonebook</h2>
+      <ErrorMessage errorMessage={errorMessage}/>
       <Notification message={message}/>
       <PersonForm add={addPerson} name={newName} 
         handleName={handleNameChange} 
