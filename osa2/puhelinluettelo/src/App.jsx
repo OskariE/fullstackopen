@@ -21,7 +21,7 @@ const App = () => {
       .then(response => {
         setPersons(response.data)
       })
-  })
+  }, [])
 
   const deletePerson = (id) => {
     const foundPerson = persons.find(p => p.id === id)
@@ -55,7 +55,7 @@ const App = () => {
         personService.update(updated.id, updated).then(
           response => {
             setPersons(persons.map(person =>
-               person.id !== updated.id ? person : response))
+               person.id !== updated.id ? person : response.data))
           }
         ).catch(error => {
           setErrorMessage(`${newName} was already removed from the server`)
