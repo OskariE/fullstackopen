@@ -56,10 +56,22 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const person = request.body
-    person.id = Math.random() * 100
-    persons = persons.concat(person)
-
-    response.json(person)
+    if (person.name && person.number) {
+        if (persons.map(p => p.name).includes(person.name) === false) {
+            person.id = Math.random() * 100
+            persons = persons.concat(person)
+            response.json(person)
+        } else {
+            return response.status(400).json({
+                error: "name must be unqiue"
+            })
+        }
+    } else {
+        console.log(person)
+        return response.status(400).json({
+            error: "name or number missing"
+        })
+    }
 })
 
 const PORT = 3001
