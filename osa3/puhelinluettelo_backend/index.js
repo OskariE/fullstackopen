@@ -9,6 +9,7 @@ morgan.token('content', request => {
     } else {return}
 })
 
+app.use(express.static('dist'))
 app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 app.use(express.json())
