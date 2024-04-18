@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/persons
+POST fullstack-puhelinluettelo-5fsy.onrender.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "testtt",
+    "name": "test",
     "number": "050-033333"
 }
