@@ -1,3 +1,5 @@
+require('dotenv').config()
+const Person = require('./models/person')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -40,7 +42,9 @@ let persons =
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -68,22 +72,19 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const person = request.body
-    if (person.name && person.number) {
-        if (persons.map(p => p.name).includes(person.name) === false) {
-            person.id = Math.random() * 100
-            persons = persons.concat(person)
-            response.json(person)
-        } else {
-            return response.status(400).json({
-                error: "name must be unqiue"
-            })
-        }
-    } else {
-        console.log(person)
-        return response.status(400).json({
-            error: "name or number missing"
-        })
+
+    if (person.name === undefined) {
+        return response.status(400).json({ error: 'name missing' })
     }
+
+    const newPerson = new Person({
+        name: person.name,
+        number: person.number
+    })
+
+    newPerson.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT || 3001
