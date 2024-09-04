@@ -1,13 +1,12 @@
-const { test, describe } = require("node:test");
+const { test, after, describe, beforeEach } = require("node:test");
 const assert = require("node:assert");
 const listHelper = require("../utils/list_helper");
+const mongoose = require('mongoose')
+const supertest = require('supertest')
+const Blog = require("../models/blog")
+const app = require('../app')
 
-test("dummy returns one", () => {
-  const blogs = [];
-
-  const result = listHelper.dummy(blogs);
-  assert.strictEqual(result, 1);
-});
+const api = supertest(app)
 
 const emptyList = [];
 
@@ -77,6 +76,11 @@ const blogs = [
   },
 ];
 
+test("dummy returns one", () => {
+  const result = listHelper.dummy(emptyList);
+  assert.strictEqual(result, 1);
+});
+
 describe("total likes", () => {
   test("empty list returns zero", () => {
     const result = listHelper.totalLikes(emptyList)
@@ -108,5 +112,59 @@ describe("favorite blog, most blogs and most total likes", () => {
   test("returns author with most total likes", () => {
     const result = listHelper.mostLikes(blogs)
     assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', likes: 17 })
+  })
+})
+
+const initialBlogs = [blogs[0], blogs[1], blogs[2]]
+
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  let blogObject = new Blog(initialBlogs[0])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[1])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[2])
+  await blogObject.save()
+})
+
+describe("backend tests", () => {
+  test("returns right amount of blogs", async () => {
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body.length, initialBlogs.length)
+  })
+
+  test("returned blogs are json", async () => {
+    await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test("blogs _id is converted to id", async () => {
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body[0].id, initialBlogs[0]._id)
+  })
+
+  test("a valid blog can be added", async () => {
+    const newBlog = {
+      title: "testing",
+      author: "aaaaaa",
+      url: "d5454545",
+      likes: "6"
+  }
+
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
+    const response = await api.get('/api/blogs')
+    const contents = response.body.map(r => r.title)
+
+    assert.strictEqual(response.body.length, initialBlogs.length+1)
+    assert(contents.includes('testing'), true)
+  })
+
+  after(async () => {
+    await mongoose.connection.close()
   })
 })
