@@ -6,12 +6,17 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test --test-concurrency=1",
-    "dev": "cross-env NODE_ENV=development nodemon index.js"
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@stylistic/eslint-plugin-js": "^2.8.0",
     "cross-env": "^7.0.3",
+    "eslint": "^9.11.1",
+    "globals": "^15.10.0",
     "nodemon": "^3.1.4",
     "supertest": "^7.0.0"
   },
