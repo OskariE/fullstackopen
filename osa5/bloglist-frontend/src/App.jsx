@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs'
 import Logout from './components/Logout'
+import Error from './components/Error'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +15,8 @@ const App = () => {
   const [title, setTitle] = useState([])
   const [author, setAuthor] = useState([])
   const [url, setUrl] = useState([])
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -39,10 +43,14 @@ const App = () => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
 
       setUser(user)
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch {
-      window.alert('wrong credentials')
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -53,7 +61,19 @@ const App = () => {
       author: author,
       url: url,
     }
-    await blogService.create(newObject)
+    try {
+      await blogService.create(newObject)
+      setNotificationMessage(`A new blog "${title}" by "${author}" added`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setErrorMessage(exception.message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
   }
 
   const handleLogout = (event) => {
@@ -68,6 +88,8 @@ const App = () => {
   return (
     <div>
       <Logout user={user} handleLogout={handleLogout}/>
+      <Notification notificationMessage={notificationMessage}/>
+      <Error errorMessage={errorMessage}/>
       <LoginForm user={user} username={username} password={password}
         setUsername={setUsername} setPassword={setPassword}
         handleLogin={handleLogin}/>

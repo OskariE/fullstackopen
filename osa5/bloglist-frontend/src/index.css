@@ -1,0 +1,21 @@
+.errorMessage {
+    color: rgb(255, 0, 0);
+    background: #fff8f8;
+    font-size: 24px;
+    border-style: solid;
+    border-radius: 3px;
+    padding: 12px;
+    margin-bottom: 8px;
+    margin-right: 50%;
+}
+
+.notificationMessage {
+    color: rgb(0, 255, 0);
+    background: rgb(249, 255, 248);
+    font-size: 24px;
+    border-style: solid;
+    border-radius: 3px;
+    padding: 12px;
+    margin-bottom: 8px;
+    margin-right: 50%;
+}

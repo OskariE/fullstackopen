@@ -4,7 +4,7 @@ const Blogs = ({blogs, title, author, url, setTitle, setAuthor, setUrl, handleCr
   if (user !== null) {
     return (
       <div>
-        <h1>blogs</h1>
+        <h2>Blogs</h2>
         <h2>Create new</h2>
         <form onSubmit={handleCreation}>
           <div>
