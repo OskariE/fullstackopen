@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs'
+import BlogForm from './components/BlogForm'
+import Toggleable from './components/Toggleable'
 import Logout from './components/Logout'
 import Error from './components/Error'
 import Notification from './components/Notification'
@@ -12,11 +14,11 @@ const App = () => {
   const [username, setUsername] = useState([])
   const [password, setPassword] = useState([])
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState([])
-  const [author, setAuthor] = useState([])
-  const [url, setUrl] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const blogFormRef = useRef()
+
+  
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -54,16 +56,16 @@ const App = () => {
     }
   }
 
-  const handleCreation = async (event) => {
-    event.preventDefault()
+  const handleCreation = async (blogObject) => {
     const newObject = {
-      title: title,
-      author: author,
-      url: url,
+      title: blogObject.title,
+      author: blogObject.author,
+      url: blogObject.url,
     }
     try {
       await blogService.create(newObject)
-      setNotificationMessage(`A new blog "${title}" by "${author}" added`)
+      blogFormRef.current.toggleVisibility()
+      setNotificationMessage(`A new blog "${blogObject.title}" by "${blogObject.author}" added`)
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
@@ -74,6 +76,42 @@ const App = () => {
       }, 5000)
     }
 
+  }
+
+  const handleRemove = async (blog) => {
+    try {
+      if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+        await blogService.remove(blog.id)
+        setNotificationMessage(`Blog removed`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+    }
+    } catch(exception) {
+      setErrorMessage(exception.message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const addLike = async (blogObject) => {
+    const newObject = {
+      user: blogObject.user,
+      id: blogObject.id,
+      likes: blogObject.likes + 1,
+      title: blogObject.title,
+      author: blogObject.author,
+      url: blogObject.url,
+    }
+    try {
+      await blogService.addLike(newObject)
+    } catch(exception) {
+      setErrorMessage(exception.message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
   const handleLogout = (event) => {
@@ -93,8 +131,10 @@ const App = () => {
       <LoginForm user={user} username={username} password={password}
         setUsername={setUsername} setPassword={setPassword}
         handleLogin={handleLogin}/>
-      <Blogs blogs={blogs} title={title} author={author} url={url} setTitle={setTitle}
-        setAuthor={setAuthor} setUrl={setUrl} handleCreation={handleCreation} user={user}/>
+      <Toggleable user={user} buttonLabel='create new blog' ref={blogFormRef}>
+        <BlogForm user={user} handleCreation={handleCreation}/>
+      </Toggleable>
+      <Blogs blogs={blogs} user={user} addLike={addLike} handleRemove={handleRemove}/>
     </div>
   )
 }
