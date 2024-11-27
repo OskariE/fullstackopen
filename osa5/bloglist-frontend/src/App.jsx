@@ -11,19 +11,19 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState([])
-  const [password, setPassword] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
   const blogFormRef = useRef()
 
-  
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -82,11 +82,12 @@ const App = () => {
     try {
       if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
         await blogService.remove(blog.id)
-        setNotificationMessage(`Blog removed`)
+        setBlogs(blogs.filter((i) => i.id !== blog.id))
+        setNotificationMessage('Blog removed')
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
-    }
+      }
     } catch(exception) {
       setErrorMessage(exception.message)
       setTimeout(() => {

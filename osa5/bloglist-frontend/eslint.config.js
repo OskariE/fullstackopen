@@ -5,8 +5,8 @@ import stylisticJs from '@stylistic/eslint-plugin-js'
 
 
 export default [
-  {files: ['**/*.{js,mjs,cjs,jsx}']},
-  {languageOptions: { globals: globals.browser }},
+  { files: ['**/*.{js,mjs,cjs,jsx}'] },
+  { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
@@ -17,25 +17,42 @@ export default [
     }
   },
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**', 'eslint.config.js'],
   },
   {
     plugins: {
       '@stylistic/js': stylisticJs
     },
     rules: {
-      '@stylistic/js/indent': [
+      'indent': [
         'error',
         2
       ],
-      '@stylistic/js/quotes': [
+      'linebreak-style': [
+        'error',
+        'unix'
+      ],
+      'quotes': [
         'error',
         'single'
       ],
-      '@stylistic/js/semi': [
+      'semi': [
         'error',
         'never'
       ],
+      'eqeqeq': 'error',
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': [
+        'error', 'always'
+      ],
+      'arrow-spacing': [
+        'error', { 'before': true, 'after': true }
+      ],
+      'no-console': 0,
+      'react/prop-types': 0,
+      'react/react-in-jsx-scope': 'off',
+      'no-unused-vars': 0,
+      'react/display-name': 0
     },
   }
 ]

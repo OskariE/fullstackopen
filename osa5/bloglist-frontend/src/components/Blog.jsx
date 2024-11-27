@@ -3,8 +3,8 @@ const Blog = ({ blog, addLike, handleRemove, user }) => {
   const [view, setView] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
   const [deleteVisible, setDeleteVisible] = useState(false)
-    
-  const show = { display: deleteVisible ? '' : 'none'}
+
+  const show = { display: deleteVisible ? '' : 'none' }
 
   const toggleVisibility = () => {
     if(user.username === blog.user.username) {
@@ -45,7 +45,7 @@ const Blog = ({ blog, addLike, handleRemove, user }) => {
   return (
     <div style={blogStyle}>
       {blog.title} <button onClick={() => {toggleView(), toggleVisibility()}}>view</button>
-    </div>  
+    </div>
   )
 }
 

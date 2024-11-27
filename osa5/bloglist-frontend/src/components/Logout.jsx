@@ -1,4 +1,4 @@
-const Logout = ({user, handleLogout}) => {
+const Logout = ({ user, handleLogout }) => {
   if (user) {
     return (
       <div>

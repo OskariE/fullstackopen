@@ -1,6 +1,7 @@
 import Blog from './Blog'
+import PropTypes from 'prop-types'
 
-const Blogs = ({blogs, user, addLike, handleRemove}) => {
+const Blogs = ({ blogs, user, addLike, handleRemove }) => {
 
   const compare = ( a, b ) => {
     if (a.likes > b.likes) {
@@ -22,4 +23,9 @@ const Blogs = ({blogs, user, addLike, handleRemove}) => {
   return null
 }
 
+Blogs.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  addLike: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+}
 export default Blogs
