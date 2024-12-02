@@ -17,34 +17,37 @@ const BlogForm = ({ user, handleCreation }) => {
   }
   if (user !== null) {
     return (
-      <div>
+      <div className='blogForm'>
         <h2>Create new</h2>
         <form onSubmit={addBlog}>
-          <div>
+          <div className='blogFormChild'>
             title
             <input
               type='text'
               value={newTitle}
               name='title'
-              onChange={({ target }) => setNewTitle(target.value)}/>
+              onChange={({ target }) => setNewTitle(target.value)}
+              id='title-input'/>
           </div>
-          <div>
+          <div className='blogFormChild'>
             author
             <input
               type='text'
               value={newAuthor}
               name='author'
-              onChange={({ target }) => setNewAuthor(target.value)}/>
+              onChange={({ target }) => setNewAuthor(target.value)}
+              id='author-input'/>
           </div>
-          <div>
+          <div className='blogFormChild'>
             url
             <input
               type='text'
               value={newUrl}
               name='url'
-              onChange={({ target }) => setNewUrl(target.value)}/>
+              onChange={({ target }) => setNewUrl(target.value)}
+              id='url-input'/>
           </div>
-          <button type='submit'>create</button>
+          <button type='submit' className='blogFormChild' id='create-submit'>create</button>
         </form>
       </div>
     )

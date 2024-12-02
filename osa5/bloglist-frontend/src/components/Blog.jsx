@@ -15,11 +15,12 @@ const Blog = ({ blog, addLike, handleRemove, user }) => {
   }
 
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    paddingTop: 5,
+    padding: 5,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    borderRadius: 5,
+    marginBottom: 7,
   }
 
   const toggleView = () => {
@@ -33,7 +34,7 @@ const Blog = ({ blog, addLike, handleRemove, user }) => {
 
   if (view) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         <div>{blog.title} <button onClick={toggleView}>hide</button></div>
         <div>{blog.url}</div>
         <div>likes {likes} <button onClick={() => {addLike(blog), syncLikes()}}>like</button></div>
@@ -43,7 +44,7 @@ const Blog = ({ blog, addLike, handleRemove, user }) => {
     )
   }
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {blog.title} <button onClick={() => {toggleView(), toggleVisibility()}}>view</button>
     </div>
   )

@@ -7,6 +7,8 @@ const Toggleable = forwardRef((props, ref) => {
   const hide = { display: visible ? 'none' : '' }
   const show = { display: visible ? '' : 'none' }
 
+  const width = { width: visible ? 230 : 111 }
+
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -17,7 +19,7 @@ const Toggleable = forwardRef((props, ref) => {
   })
   if(props.user) {
     return (
-      <div>
+      <div className='toggleable' style={width}>
         <div style={hide}>
           <button onClick={toggleVisibility}>{props.buttonLabel}</button>
         </div>

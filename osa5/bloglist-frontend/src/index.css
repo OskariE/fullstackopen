@@ -7,6 +7,7 @@
     padding: 12px;
     margin-bottom: 8px;
     margin-right: 50%;
+    box-shadow: 3px 3px 3px grey;
 }
 
 .notificationMessage {
@@ -18,4 +19,29 @@
     padding: 12px;
     margin-bottom: 8px;
     margin-right: 50%;
+    box-shadow: 3px 3px 3px grey;
+}
+
+.blogList, .logout, .toggleable {
+    margin: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction:column;
+}
+
+.logout {
+    width: 120px;
+}
+
+.toggleable {
+    padding: 10px;
+    background-color: rgb(242, 242, 242);
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.blogForm, .blogFormChild {
+    padding: 2px;
 }
