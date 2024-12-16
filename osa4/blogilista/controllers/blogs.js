@@ -31,7 +31,7 @@ blogsRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user._id,
+    user: user,
   })
 
   const savedBlog = await blog.save()
@@ -55,7 +55,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(401).json({ error: 'invalid token' })
   }
 
-  const blog = await Blog.findById(request.params.id) 
+  const blog = await Blog.findById(request.params.id)
 
   if (blog.user.toString() === decodedToken.id) {
     await Blog.findByIdAndDelete(request.params.id)
