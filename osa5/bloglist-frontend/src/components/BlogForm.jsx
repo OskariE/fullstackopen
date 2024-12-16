@@ -23,6 +23,7 @@ const BlogForm = ({ user, handleCreation }) => {
           <div className='blogFormChild'>
             title
             <input
+              data-testid='title'
               type='text'
               value={newTitle}
               name='title'
@@ -32,6 +33,7 @@ const BlogForm = ({ user, handleCreation }) => {
           <div className='blogFormChild'>
             author
             <input
+              data-testid='author'
               type='text'
               value={newAuthor}
               name='author'
@@ -41,6 +43,7 @@ const BlogForm = ({ user, handleCreation }) => {
           <div className='blogFormChild'>
             url
             <input
+              data-testid='url'
               type='text'
               value={newUrl}
               name='url'
