@@ -139,9 +139,10 @@ describe('Blog app', () => {
       })
 
       test('blogs are sorted by likes', async ({ page }) => {
-        await page.getByRole('button', { name: 'view' }).first().click()
-        await page.getByRole('button', { name: 'view' }).first().click()
-        await page.getByRole('button', { name: 'view' }).first().click()
+        const viewButtons = await page.getByRole('button', { name: 'view' }).all()
+        await viewButtons[0].click()
+        await viewButtons[0].click()
+        await viewButtons[0].click()
 
         const likeButtons = await page.getByRole('button', { name: 'like' }).all()
         await likeButtons[0].click()
